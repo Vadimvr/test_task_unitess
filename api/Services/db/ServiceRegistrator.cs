@@ -1,7 +1,7 @@
 ﻿using db;
 using Microsoft.EntityFrameworkCore;
 
-namespace api.Services
+namespace api.Services.db
 {
     internal static class ServiceRegistratorDB
     {
