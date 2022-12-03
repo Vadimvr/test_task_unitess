@@ -1,4 +1,4 @@
-namespace test_task_unitess
+namespace api
 {
     public class Program
     {
@@ -13,6 +13,8 @@ namespace test_task_unitess
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
+
+            app.UseHttpsRedirection();
 
             app.UseAuthorization();
 
