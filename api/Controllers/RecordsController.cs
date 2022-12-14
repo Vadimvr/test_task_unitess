@@ -65,58 +65,65 @@ namespace api.Controllers
             {
                 return NotFound();
             }
-            Console.WriteLine(record.HiddenText);
             return RecordDTO.ConvertToRecordDTO(record);
         }
         #endregion
 
         #region Put
 
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutRecord(int id, Record recordNew)
-        {
-            if (id != recordNew.Id) { return BadRequest(); }
-            var record = _context.Records.FirstOrDefault(x => x.Id == id);
-            if (record == null) { return NotFound(); }
+        //[HttpPut("{id}")]
+        //public async Task<IActionResult> PutRecord(int id, Record recordNew)
+        //{
+        //    if (id != recordNew.Id) { return BadRequest(); }
+        //    var records = _context.Records.FirstOrDefault(x => x.Id == id);
+        //    if (records == null) { return NotFound(); }
 
-            record.Text = recordNew.Text;
-            record.Date = recordNew.Date;
-            record.HiddenText = recordNew.HiddenText;
+        //    records.Text = recordNew.Text;
+        //    records.Date = recordNew.Date;
+        //    records.HiddenText = recordNew.HiddenText;
 
-            _context.Entry(record).State = EntityState.Modified;
+        //    _context.Entry(records).State = EntityState.Modified;
 
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!RecordExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
+        //    try
+        //    {
+        //        await _context.SaveChangesAsync();
+        //    }
+        //    catch (DbUpdateConcurrencyException)
+        //    {
+        //        if (!RecordExists(id))
+        //        {
+        //            return NotFound();
+        //        }
+        //        else
+        //        {
+        //            throw;
+        //        }
+        //    }
 
-            return NoContent();
-        }
+        //    return NoContent();
+        //}
         #endregion
 
         #region Post    
         [HttpPost]
-        public async Task<ActionResult<Record>> PostRecord(Record record)
+        public async Task<ActionResult<Record>> PostRecord(Record[] records)
         {
             if (_context.Records == null)
             {
                 return Problem("Entity set 'apiContext.Record'  is null.");
             }
-            _context.Records.Add(record);
+            if (records != null && records.Length > 0)
+            {
+                foreach (var item in records)
+                {
+                    _context.Records.Add(item);
+
+                }
+
+            }
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetRecord", new { id = record.Id }, RecordDTO.ConvertToRecordDTO(record));
+            return Ok("GetRecord");
         }
         #endregion
 
